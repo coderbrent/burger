@@ -16,4 +16,4 @@ connection.query('SELECT * FROM burgers', function(error, results, fields) {
 
 }
 
-module.exports = connection();
+module.exports = connection;

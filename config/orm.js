@@ -1,5 +1,5 @@
 const connection = require('./connection.js');
-const mysql = require('mysql');
+const db = require('mysql');
 
 let orm = {
 selectAll: function selectAll() {

@@ -1,19 +1,48 @@
-const connection = require('./connection.js');
-const db = require('mysql');
+const connection = require('./connection');
 
-let orm = {
-selectAll: function selectAll() {
-    connection.query('SELECT * FROM burgers', function(data, status, fields) {
-    
-        })
-    },
-insertOne: function insertOne(burger, bool) {
-    connection.query('INSERT INTO burgers VALUES ??', [burger, bool], function(data, status, fields) {
-      if(!status === 200) {
-        console.log('Captain! Captain! Theres been an error!');
-      } else { console.log(`The following changes have been made ${data}`) };
-        })
-    },
+//Helper function made to create the correct amount of ? marks needed to properly use the mysql insert querys
+function questionMarks(num) {
+    const arr = [];
+    for (let i = 0; i < num; i++) {
+      arr.push("?");
+    }
+    return arr.toString();
+  }
+
+var orm = {
+selectAll: function(table, cb) {
+    let burgerID = connection.escape(table);
+    let queryString = (`SELECT * FROM ${burgerID}`);
+    connection.query(queryString, function(data, error, fields) {
+      if(error) {
+        console.log(data);  
+        throw error;
+        } else {
+            console.log(data);
+          return cb(data);
+        }
+    });
+},
+insertOne: function(table, cols, vals, cb) {
+    //this dynamically constructs a query based on the columns passed in and the values (? count correlates to how many user created values are in the array)
+    //note: this feels like it could be refactored somehow?
+    let queryString = `INSERT INTO ${table}`;
+    queryString += " (";
+    queryString += cols.toString();
+    queryString += ") ";
+    queryString += "VALUES (";
+    queryString += questionMarks(vals.length);
+    queryString += ") ";
+
+    connection.query(queryString, [vals], function(data, error, fields) { //the actual query with the constructed mysql syntax passed in.
+      if(error) {
+        throw error;
+      } else {
+        cb(data);
+      }
+    });
+},
+
 }
 
 module.exports = orm;

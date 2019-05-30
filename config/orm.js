@@ -1,7 +1,7 @@
 const connection = require('./connection');
 
 //Helper function made to create the correct amount of ? marks needed to properly use the mysql insert querys
-function questionMarks(num) {
+const questionMarks = (num) => {
     const arr = [];
     for (let i = 0; i < num; i++) {
       arr.push("?");
@@ -9,17 +9,15 @@ function questionMarks(num) {
     return arr.toString();
   }
 
-var orm = {
-selectAll: function(table, cb) {
-    let burgerID = connection.escape(table);
-    let queryString = (`SELECT * FROM ${burgerID}`);
-    connection.query(queryString, function(data, error, fields) {
+const orm = {
+selectAll: (cb) => {
+    let queryString = 'SELECT * FROM burgers';
+    connection.query(queryString, (error, result) => {
       if(error) {
-        console.log(data);  
         throw error;
         } else {
-            console.log(data);
-          return cb(data);
+        cb(result);
+        console.log(result)
         }
     });
 },

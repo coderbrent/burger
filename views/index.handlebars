@@ -1,13 +1,12 @@
 <h1>Burgers I'd Like To Consume</h1>
 
-<h2>Burgers That I've Voraciously Devoured</h2>
+<h3>Burgers That I've Voraciously Devoured</h3>
 
 <ul>
   {{#each burgers}}
-  <li>{{burger}}</li>
-    {{!-- {{#unless devoured}}
+  <li>Burger: {{burger_name}}</li>
+    {{#if devoured}}
       {{> burgers/burger-block devoured=true}}
-    {{/unless}} --}}
   {{/each}}
 </ul>
 

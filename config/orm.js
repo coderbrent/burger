@@ -9,6 +9,29 @@ const questionMarks = (num) => {
     return arr.toString();
   }
 
+// Helper function to convert object key/value pairs to SQL syntax
+function objToSql(ob) {
+    var arr = [];
+    // loop through the keys and push the key/value as a string int arr
+    for (var key in ob) {
+      var value = ob[key];
+      // check to skip hidden properties
+      if (Object.hasOwnProperty.call(ob, key)) {
+        // if string with spaces, add quotations (Lana Del Grey => 'Lana Del Grey')
+        if (typeof value === "string" && value.indexOf(" ") >= 0) {
+          value = "'" + value + "'";
+        }
+        // e.g. {name: 'Lana Del Grey'} => ["name='Lana Del Grey'"]
+        // e.g. {sleepy: true} => ["sleepy=true"]
+        arr.push(key + "=" + value);
+      }
+    }
+  
+    // translate array of strings to a single comma-separated string
+    return arr.toString();
+  }
+
+
 const orm = {
 selectAll: (cb) => {
     let queryString = 'SELECT * FROM burgers';
@@ -21,10 +44,10 @@ selectAll: (cb) => {
         }
     });
 },
-insertOne: function(table, cols, vals, cb) {
+insertOne: (table, cols, vals, cb) => {
     //this dynamically constructs a query based on the columns passed in and the values (? count correlates to how many user created values are in the array)
-    //note: this feels like it could be refactored somehow?
-    let queryString = `INSERT INTO ${table}`;
+    let safeTable = connection.escape(table);
+    const queryString = `INSERT INTO ${safeTable}`;
     queryString += " (";
     queryString += cols.toString();
     queryString += ") ";

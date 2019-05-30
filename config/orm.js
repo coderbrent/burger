@@ -9,24 +9,20 @@ const questionMarks = (num) => {
     return arr.toString();
   }
 
-// Helper function to convert object key/value pairs to SQL syntax
+
 function objToSql(ob) {
-    var arr = [];
-    // loop through the keys and push the key/value as a string int arr
-    for (var key in ob) {
-      var value = ob[key];
-      // check to skip hidden properties
+    const entries = Object.entries(ob)
+    const arr = [];
+    console.log(`entries: ${entries}`)
+    for (const key of entries) {
       if (Object.hasOwnProperty.call(ob, key)) {
         // if string with spaces, add quotations (Lana Del Grey => 'Lana Del Grey')
         if (typeof value === "string" && value.indexOf(" ") >= 0) {
           value = "'" + value + "'";
         }
-        // e.g. {name: 'Lana Del Grey'} => ["name='Lana Del Grey'"]
-        // e.g. {sleepy: true} => ["sleepy=true"]
         arr.push(key + "=" + value);
       }
     }
-  
     // translate array of strings to a single comma-separated string
     return arr.toString();
   }
@@ -55,7 +51,7 @@ insertOne: (table, cols, vals, cb) => {
     queryString += questionMarks(vals.length);
     queryString += ") ";
 
-    connection.query(queryString, [vals], function(data, error, fields) { //the actual query with the constructed mysql syntax passed in.
+    connection.query(queryString, [vals], function(error, data) { //the actual query with the constructed mysql syntax passed in.
       if(error) {
         throw error;
       } else {
@@ -63,7 +59,26 @@ insertOne: (table, cols, vals, cb) => {
       }
     });
 },
+updateOne: (table, objColVals, condition, cb) => {
+    //escape user input then create 1st line of sql UPDATE query.
+    const safeTable = connection.escape(table);
+    let queryString = `UPDATE ${safeTable}`
+    
+    //continue to add more sql string based on user actions.
+    queryString += ` SET `;
+    queryString += objToSql(objColVals);
+    queryString += ` WHERE `;
+    queryString += condition;
+    
+    //query the db and return results as a callback from updateOne method.
+    connection.query(queryString, (err, result) => {
+      if (err) {
+        throw err;
+      }
+      cb(result);
+    });
 
+  }
 }
 
 module.exports = orm;

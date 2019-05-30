@@ -10,24 +10,38 @@ const questionMarks = (num) => {
   }
 
 
+// function objToSql(ob) {
+//     const entries = Object.entries(ob)
+//     const arr = [];
+//     console.log(`entries: ${entries}`)
+//     for (const key of entries) {
+//       if (Object.hasOwnProperty.call(ob, key)) {
+//         // if string with spaces, add quotations (Lana Del Grey => 'Lana Del Grey')
+//         if (typeof value === "string" && value.indexOf(" ") >= 0) {
+//           value = "'" + value + "'";
+//         }
+//         arr.push(key + "=" + value);
+//       }
+//     }
+//     // translate array of strings to a single comma-separated string
+//     return arr.toString();
+//   }
+
+
+// Helper function to convert object key/value pairs to SQL syntax
 function objToSql(ob) {
-    const entries = Object.entries(ob)
-    const arr = [];
-    console.log(`entries: ${entries}`)
-    for (const key of entries) {
+    var arr = [];
+    for (var key in ob) {
+      var value = ob[key];
       if (Object.hasOwnProperty.call(ob, key)) {
-        // if string with spaces, add quotations (Lana Del Grey => 'Lana Del Grey')
         if (typeof value === "string" && value.indexOf(" ") >= 0) {
           value = "'" + value + "'";
         }
         arr.push(key + "=" + value);
       }
     }
-    // translate array of strings to a single comma-separated string
-    return arr.toString();
-  }
-
-
+}
+  
 const orm = {
 selectAll: (cb) => {
     let queryString = 'SELECT * FROM burgers';
@@ -50,7 +64,7 @@ insertOne: (table, cols, vals, cb) => {
     queryString += "VALUES (";
     queryString += questionMarks(vals.length);
     queryString += ") ";
-
+    console.log(safeTable)
     connection.query(queryString, [vals], function(error, data) { //the actual query with the constructed mysql syntax passed in.
       if(error) {
         throw error;

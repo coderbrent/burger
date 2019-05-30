@@ -1,7 +1,6 @@
-<h1>Burgers I'd Like To Consume</h1>
+<h1 class="jumbotron">Burgers I'd Like To Consume</h1>
 
 <h3>Burgers That I've EATEN</h3>
-
 <ul>
   {{#each burgers}}
   <li>Burger: {{burger_name}}</li>
@@ -20,18 +19,18 @@
 </ul>
 
 <h2>Add a Burger</h2>
-<form class="create-form">
+<form class="new-burger m-3">
 
   <div class="form-group">
-    <label for="burger">Burger Name:</label>
-    <input type="text" id="burger" name="name">
+    <label for="burger">Add A Burger!</label>
+    <input type="text" id="burger-name" name="burger_name">
   </div>
 
   <div class="form-group">
-    <label for="devoured">Eaten?</label><br>
+    <label for="devoured">Have You Eaten This Burger Before?</label><br>
     <input type="radio" name="eaten" value="1"> Eaten!<br>
-    <input type="radio" name="not-eaten" value="0"> Not Eaten!
+    <input type="radio" name="not-eaten" value="0"> Never Eaten Before!
   </div>
 
-  <button type="submit">Add Burger</button>
+  <button type="submit" class='btn btn-primary'>Add Burger</button>
 </form>

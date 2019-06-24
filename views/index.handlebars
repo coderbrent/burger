@@ -1,36 +1,80 @@
-<h1 class="jumbotron">Burgers I'd Like To Consume</h1>
+<h1 class="jumbotron">Burgers I'd Like To Devour</h1>
 
-<h3>Burgers That I've EATEN</h3>
-<ul>
-  {{#each burgers}}
-  <li>Burger: {{burger_name}}</li>
-    {{#if devoured}}
-      {{> burgers/burgers-block devoured=true}}
-    {{/if}}
-  {{/each}}
-</ul>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card m-2">
+        <h5 class="card-header">Burgers I haven't EATEN</h5>
+      <div class="card-body">
+        <ul>
+          {{#each burgers}}
+            {{#unless devoured}}
+             {{> burgers/burgers-block devoured=true}}
+            {{/unless}}
+          {{/each}}
+        </ul>
+        </div>
+      </div>
+    </div>
 
-<h3>Burgers I've Not Yet EATEN</h3>
-
-<ul>
-  {{#each burgers}}
-      {{burgers}}
-  {{/each}}
-</ul>
-
-<h2>Add a Burger</h2>
-<form class="new-burger m-3">
-
-  <div class="form-group">
-    <label for="burger">Add A Burger!</label>
-    <input type="text" id="burger-name" name="burger_name">
+    <div class="col-md-6">
+      <div class="card m-2">
+          <h5 class="card-header">Burgers I Have EATEN</h5>
+          <div class="card-body">
+            <ul>
+              {{#each burgers}}
+                {{#if devoured}}
+                  {{> burgers/burgers-block devoured=false}}
+                {{/if}}
+              {{/each}}
+            </ul>
+          </div>
+      </div>
+    </div>
   </div>
 
-  <div class="form-group">
-    <label for="devoured">Have You Eaten This Burger Before?</label><br>
-    <input type="radio" name="eaten" value="1"> Eaten!<br>
-    <input type="radio" name="not-eaten" value="0"> Never Eaten Before!
-  </div>
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <div class="card m-2">
+      <h5 class="card-header">Add A Burger</h5>
+      <div class="card-body">
+        <form required="true">
+          <div class="form-group">
+            <label for="burger">New Burger Name: </label>
+            <input type="text" class="form-control" id="burger_name" name="burger_name">
+          </div>
 
-  <button type="submit" class='btn btn-primary'>Add Burger</button>
-</form>
+          <div class="form-check">
+            <label for="devoured">Have You Eaten This Burger Before?</label><br>
+            <input class="form-check-input" type="radio" name="devoured" id="devoured" value="1"> 
+            <label class="form-check-label">Devoured!</label><br>
+            <input class="form-check-input" type="radio" name="not-devoured" id="devoured" value="0">
+            <label class="form-check-label">Not Devoured!</label>
+          </div>
+            <button type="submit" class='btn btn-primary' id="new-burger" data-id="10">Add Burger</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          {{burger_name}} has been added!
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

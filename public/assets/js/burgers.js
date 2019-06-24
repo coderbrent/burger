@@ -1,40 +1,56 @@
-$(function() {
+$(() => {
+
+  $(".delete-burger").on('click', event => {
+    console.log('this deletes a burger')
+    event.preventDefault();
+
+    const id = $(this).data('id');
+    console.log(id);
+  
+    $.ajax('/api/burgers', + id, {
+      method: "POST"
+    }).then(() => { 
+      console.log('burger ' + id  + ' was deleted');
+    })
+  } )
+
+  $("#new-burger").on('click', event => {
+    event.preventDefault();
+    const newBurger = {
+      burger_name: $("#burger_name").val().trim(),
+      devoured: $("[id=devoured]:checked").val().trim()
+    }
+    
+    $.ajax('api/burgers', {
+      method: "POST",
+      data: newBurger,
+      type: "application/json"
+    }).then(function() {
+      console.log('return from post burgers')
+      location.reload();
+    });
+  })
+
   $(".change-status").on('click', (event) => {
     event.preventDefault();
 
     const id = $(this).data('id');
-    const newStatus = $(this).data('isDevoured')
+    const newStatus = $(this).data('devoured')
+    console.log('this id is: ' + id);
 
-    let newConsumptionState = {
+    const newConsumptionState = {
       eaten: newStatus
     };
 
-    $.ajax('/api/burgers/', + id, {
-      type: "PUT",
+    $.ajax('api/burgers/', + id, {
+      method: "PUT",
       data: newConsumptionState
     }).then(() => {
       console.log('burger has been consumed,', newStatus);
-      //location.reload();
+      location.reload();
     })
-
-    //ADD NEW BURGER FUNCTION -> TAKES PLACE WHEN NEW BURGER FORM IS SUBMITTED
-
-
   })
 })
 
-$(".new-burger").on('submit', (event) => {
-  event.preventDefault();
-  const newBurger = {
-    name: $("#burger-name").val().trim(),
-    devoured: $("[name=devoured]:checked").val().trim()
-  }
 
-  $.ajax('/api/burgers', {
-    type: "POST",
-    data: newBurger
-  }).then(() => {
-    console.log('A new burger has been added!');
-    location.reload();
-  })
-})
+

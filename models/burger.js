@@ -8,14 +8,22 @@ const burger = {
     })
   },
   create: (cols, vals, cb) => {
-    orm.insertOne('burgers', cols, vals, (res) => {
+    orm.create(cols, vals, (res) => {
+      console.log('is anything happening?')
       cb(res);
+      console.log('this works ' + cols + vals)
+      console.log(res)
     })
   },
   update: (objColVals, condition, cb) => {
     orm.updateOne('burgers', objColVals, condition, (res) => {
       cb(res);
     })
+  },
+  delete: (table, id, cb) => {
+    orm.delete(table, id, (res) => {
+      cb(res);
+    } )
   }
 }
 

@@ -1,4 +1,5 @@
 const connection = require('./connection');
+const mysql = require('mysql')
 
 //Helper function made to create the correct amount of ? marks needed to properly use the mysql insert querys
 const questionMarks = (num) => {
@@ -10,25 +11,25 @@ const questionMarks = (num) => {
   }
 
 
-// function objToSql(ob) {
-//     const entries = Object.entries(ob)
-//     const arr = [];
-//     console.log(`entries: ${entries}`)
-//     for (const key of entries) {
-//       if (Object.hasOwnProperty.call(ob, key)) {
-//         // if string with spaces, add quotations (Lana Del Grey => 'Lana Del Grey')
-//         if (typeof value === "string" && value.indexOf(" ") >= 0) {
-//           value = "'" + value + "'";
-//         }
-//         arr.push(key + "=" + value);
-//       }
-//     }
-//     // translate array of strings to a single comma-separated string
-//     return arr.toString();
-//   }
+function objToSql(ob) {
+    const entries = Object.entries(ob)
+    const arr = [];
+    console.log(`entries: ${entries}`)
+    for (const key of entries) {
+      if (Object.hasOwnProperty.call(ob, key)) {
+        // if string with spaces, add quotations (Lana Del Grey => 'Lana Del Grey')
+        if (typeof value === "string" && value.indexOf(" ") >= 0) {
+          value = "'" + value + "'";
+        }
+        arr.push(key + "=" + value);
+      }
+    }
+    // translate array of strings to a single comma-separated string
+    return arr.toString();
+  }
 
 
-// Helper function to convert object key/value pairs to SQL syntax
+//Helper function to convert object key/value pairs to SQL syntax
 function objToSql(ob) {
     var arr = [];
     for (var key in ob) {
@@ -50,27 +51,15 @@ selectAll: (cb) => {
         throw error;
         } else {
         cb(result);
-        console.log(result)
         }
     });
 },
-insertOne: (table, cols, vals, cb) => {
-    //this dynamically constructs a query based on the columns passed in and the values (? count correlates to how many user created values are in the array)
-    let safeTable = connection.escape(table);
-    const queryString = `INSERT INTO ${safeTable}`;
-    queryString += " (";
-    queryString += cols.toString();
-    queryString += ") ";
-    queryString += "VALUES (";
-    queryString += questionMarks(vals.length);
-    queryString += ") ";
-    console.log(safeTable)
-    connection.query(queryString, [vals], function(error, data) { //the actual query with the constructed mysql syntax passed in.
-      if(error) {
-        throw error;
-      } else {
-        cb(data);
-      }
+create: (cols, vals, cb) => {
+  console.log('create is called')
+  connection.query('INSERT INTO burgers (??) VALUES (?)', [cols, vals], function(error, data) { //the actual query with the constructed mysql syntax passed in.
+      cb(data)
+      console.log('data returned: ' + data)
+      console.log(error)
     });
 },
 updateOne: (table, objColVals, condition, cb) => {
@@ -91,6 +80,17 @@ updateOne: (table, objColVals, condition, cb) => {
       }
       cb(result);
     });
+  },
+  delete: (table, id, cb) => {
+    const safeTable = connection.escape(table);
+    let queryString = `DELETE FROM ${safeTable} WHERE id ??`
+
+    connection.query(queryString, [id], (err, result) => {
+      if(err) {
+        throw err;
+      }
+      cb(result);
+    })
 
   }
 }

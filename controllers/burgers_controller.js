@@ -1,29 +1,36 @@
 const express = require('express');
 const burger = require('../models/burger');
 const router = express.Router();
-const mysql = require('mysql')
 
+//gets all burgers from the db
 router.get('/', (req, res) => {
-  burger.all((results) => {
+  burger.all(results => {
     let hbObj = {
       burgers: results
     }
-    //console.log(hbObj);
     res.render("index", hbObj);
   })
 })
 
+//adds a burger to the eaten/uneaten list depending on option selected
 router.post('/api/burgers/', (req, res) => {
   burger.create(['burger_name', 'devoured'], [req.body.burger_name, req.body.devoured], (results) => {
-    console.log(results)
     res.end();
   })
 });
 
-router.put('/api/burgers/:id', (req, res) => {
-  console.log('burger with the id: ' + req.params.id + ' will be deleted');
-  burger.delete('burgers', [req.params.id])
+//deletes a burger
+router.delete('/api/burgers/delete/:id', (req, res) => {
+  burger.delete(req.params.id, results => {
+  })
   res.end();
+})
+
+//changes a burger from not devoured to devoured
+router.put('/api/burgers/change/:id', (req, res, next) => {
+  burger.update(req.body, req.params.id, results => {
+  })
+  res.end()
 })
 
 module.exports = router;

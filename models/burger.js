@@ -1,22 +1,19 @@
 const orm = require('../config/orm.js');
 
 const burger = {
+//crud actions for burger list
   all: (cb) => {
     orm.selectAll((res) => {
       cb(res);
-      console.log(res);
     })
   },
   create: (cols, vals, cb) => {
     orm.create(cols, vals, (res) => {
-      console.log('is anything happening?')
       cb(res);
-      console.log('this works ' + cols + vals)
-      console.log(res)
     })
   },
-  update: (objColVals, condition, cb) => {
-    orm.updateOne('burgers', objColVals, condition, (res) => {
+  update: (objColVals, id, cb) => {
+    orm.update(objColVals, id, res => {
       cb(res);
     })
   },

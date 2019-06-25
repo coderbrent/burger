@@ -1,18 +1,15 @@
-$(() => {
+$(function() {
 
-  $(".delete-burger").on('click', event => {
-    console.log('this deletes a burger')
+  $(".delete-burger").on('click', function(event) {
     event.preventDefault();
-
     const id = $(this).data('id');
-    console.log(id);
-  
-    $.ajax('/api/burgers', + id, {
-      method: "POST"
-    }).then(() => { 
-      console.log('burger ' + id  + ' was deleted');
+
+    $.ajax('/api/burgers/delete/' + id, {
+      type: "DELETE",
+    }).then(function() {
+      location.reload();
     })
-  } )
+  });
 
   $("#new-burger").on('click', event => {
     event.preventDefault();
@@ -26,27 +23,25 @@ $(() => {
       data: newBurger,
       type: "application/json"
     }).then(function() {
-      console.log('return from post burgers')
       location.reload();
     });
   })
 
-  $(".change-status").on('click', (event) => {
+  $(".change-status").on('click', function(event) {
     event.preventDefault();
 
     const id = $(this).data('id');
-    const newStatus = $(this).data('devoured')
-    console.log('this id is: ' + id);
+    const newStatus = $(this).data('newstatus')
 
     const newConsumptionState = {
-      eaten: newStatus
+      devoured: newStatus
     };
 
-    $.ajax('api/burgers/', + id, {
+    $.ajax('/api/burgers/change/' + id, {
       method: "PUT",
-      data: newConsumptionState
-    }).then(() => {
-      console.log('burger has been consumed,', newStatus);
+      data: newConsumptionState,
+      type: 'application/json'
+    }).then(function() {
       location.reload();
     })
   })

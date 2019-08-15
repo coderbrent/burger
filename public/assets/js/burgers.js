@@ -4,18 +4,11 @@ $(function() {
     event.preventDefault();
     const id = $(this).data('id');
 
-<<<<<<< HEAD
     $.ajax('/api/burgers/', + id, {
       type: "PUT",
       data: newConsumptionState
     }).then(() => {
       //location.reload();
-=======
-    $.ajax('/api/burgers/delete/' + id, {
-      type: "DELETE",
-    }).then(function() {
-      location.reload();
->>>>>>> 1b11805a69217f9f8d02f8e503ab4ef35b29f71a
     })
   });
 
@@ -55,7 +48,6 @@ $(function() {
   })
 })
 
-<<<<<<< HEAD
 $(".new-burger").on('submit', (event) => {
   event.preventDefault();
   const newBurger = {
@@ -70,7 +62,3 @@ $(".new-burger").on('submit', (event) => {
     location.reload();
   })
 })
-=======
-
-
->>>>>>> 1b11805a69217f9f8d02f8e503ab4ef35b29f71a

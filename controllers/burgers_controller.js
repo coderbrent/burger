@@ -12,16 +12,9 @@ router.get('/', (req, res) => {
   })
 })
 
-<<<<<<< HEAD
 router.post('/api/burgers', (req, res) => {
   burger.create(["burger_name", "devoured"], [req.body.burger_name, req.body.devoured], (results) => {
     res.json({ id: results.insertId });
-=======
-//adds a burger to the eaten/uneaten list depending on option selected
-router.post('/api/burgers/', (req, res) => {
-  burger.create(['burger_name', 'devoured'], [req.body.burger_name, req.body.devoured], (results) => {
-    res.end();
->>>>>>> 1b11805a69217f9f8d02f8e503ab4ef35b29f71a
   })
 });
 

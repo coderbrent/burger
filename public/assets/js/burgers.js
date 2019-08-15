@@ -13,7 +13,6 @@ $(function() {
       type: "PUT",
       data: newConsumptionState
     }).then(() => {
-      console.log('burger has been consumed,', newStatus);
       //location.reload();
     })
 
@@ -34,7 +33,6 @@ $(".new-burger").on('submit', (event) => {
     type: "POST",
     data: newBurger
   }).then(() => {
-    console.log('A new burger has been added!');
     location.reload();
   })
 })

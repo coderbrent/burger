@@ -4,7 +4,6 @@ const burger = {
   all: (cb) => {
     orm.selectAll((res) => {
       cb(res);
-      console.log(res);
     })
   },
   create: (cols, vals, cb) => {

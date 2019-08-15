@@ -1,5 +1,7 @@
 const connection = require('./connection');
+const mysql = require('mysql')
 
+<<<<<<< HEAD
 //Converts the strings passed in to sql friendly syntax with all the nice "?"s!
 const questionMarks = (num) => {
     const arr = [];
@@ -23,6 +25,8 @@ const objToSql = ob => {
     }
 }
   
+=======
+>>>>>>> 1b11805a69217f9f8d02f8e503ab4ef35b29f71a
 const orm = {
 selectAll: (cb) => {
     let queryString = 'SELECT * FROM burgers';
@@ -34,6 +38,7 @@ selectAll: (cb) => {
         }
     });
 },
+<<<<<<< HEAD
 insertOne: (table, cols, vals, cb) => {
     //this dynamically constructs a query based on the columns passed in and the values (? count correlates to how many user created values are in the array)
     let safeTable = connection.escape(table);
@@ -62,13 +67,37 @@ updateOne: (table, objColVals, condition, cb) => {
     queryString += ` WHERE `;
     queryString += condition;
     
+=======
+create: (cols, vals, cb) => {
+  console.log('create is called')
+  connection.query('INSERT INTO burgers (??) VALUES (?)', [cols, vals], function(error, data) { //the actual query with the constructed mysql syntax passed in.
+      cb(data)
+      console.log('data returned: ' + data)
+      console.log(error)
+    });
+},
+update: (objColVals, id, cb) => {
+    let value = true;
+    let queryString = 'UPDATE burgers SET devoured = ' + value;
+    queryString += ' WHERE id = ' + connection.escape(id);
+    
+    console.log(queryString);
+>>>>>>> 1b11805a69217f9f8d02f8e503ab4ef35b29f71a
     connection.query(queryString, (err, result) => {
       if (err) {
         throw err;
       }
       cb(result);
     });
-
+  },
+  delete: (id, cb) => {
+    const queryString = 'DELETE FROM burgers WHERE id = ' + connection.escape(id);
+    connection.query(queryString, id, (err, result) => {
+      if(err) {
+        console.log(err)
+      }
+      cb(result);
+    })
   }
 }
 
